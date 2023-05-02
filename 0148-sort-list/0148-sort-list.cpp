@@ -10,26 +10,64 @@
  */
 class Solution {
 public:
+    ListNode* findMid(ListNode* head){
+        ListNode* slow=head;
+        ListNode* fast=head->next;
+
+        while(fast and fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        return slow;
+    }
+
+    ListNode* merge(ListNode* left, ListNode* right){
+        if(!left)
+          return right;
+
+        if(!right)
+          return left;
+
+       ListNode* ans=new ListNode();
+       ListNode* temp=ans;
+
+       while(left and right)  {
+           if(left->val < right->val){
+               ans->next=new ListNode(left->val);
+               left=left->next;
+           }
+           else{
+               ans->next=new ListNode(right->val);
+               right=right->next;
+           }
+           ans=ans->next;
+       } 
+       while(left){
+           ans->next=new ListNode(left->val);
+           left=left->next;
+           ans=ans->next;
+       }
+       while(right){
+           ans->next=new ListNode(right->val);
+           right=right->next;
+           ans=ans->next;
+       }
+       return temp->next;
+    }
 
     ListNode* sortList(ListNode* head) {
-        
-        map<int, int> mp;
-        ListNode* temp=head;
+       if(head==NULL or head->next==NULL)
+       return head;
 
-        while(temp!=NULL){
-            mp[temp->val]++;
-            temp=temp->next;
-        }
-        ListNode* ans=new ListNode();
-         ListNode* ans2=ans;
-        for(auto it:mp){
-            while(it.second--){
-                ans->next=new ListNode(it.first);
-                ans=ans->next;
-                cout<<it.first<<" ";
-            }
-        }
-        return ans2->next;
-        
+       ListNode* mid=findMid(head);
+       ListNode* right=head;
+       ListNode* left=mid->next;
+       mid->next=NULL;
+
+       left=sortList(left);
+       right=sortList(right);
+
+       ListNode* ans=merge(left,right);
+       return ans;
     }
 };
