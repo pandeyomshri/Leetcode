@@ -59,8 +59,8 @@ vector<int> topoSort(int V, vector<int> adj[]){ //Kahn's algorithm (BFS)R
 	    ans.push_back(node);
 	    
 	    for(auto it: adj[node]){
-	        indegree[it]--;
-	        if(indegree[it]==0)
+	       if( --indegree[it] == 0)
+	       // if(indegree[it]==0)
 	          q.push(it);
 	    }
 	    
